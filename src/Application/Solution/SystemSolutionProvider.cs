@@ -33,6 +33,8 @@ public class SystemSolutionProvider
             var nextSalesStep = _salesSolution.ResolveStep(currentSalesStep, interval);
             TransferDependencies(nextSalesStep, nextProductionStep);
             yield return MapStepsToSolutionStep(nextSalesStep, nextProductionStep, i * interval);
+            currentSalesStep = nextSalesStep;
+            currentProductionStep = nextProductionStep;
         }
     }
 
