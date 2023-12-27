@@ -1,7 +1,7 @@
 ﻿using Domain;
 using Solution.Conditions;
 
-namespace Solution.Solution;
+namespace Solution.SolutionProviders;
 
 public class SalesSolutionProvider
 {
