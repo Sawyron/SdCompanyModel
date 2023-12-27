@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Application\Solution.csproj" />
+    <ProjectReference Include="..\Solution\Solution.csproj" />
   </ItemGroup>
 
 </Project>
