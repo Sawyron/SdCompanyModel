@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.DependencyInjection;
 using ScottPlot;
+using System.Windows;
 using System.Windows.Controls;
 using WpfUi.Solution.Messages;
 
@@ -13,7 +15,7 @@ public partial class SolutionView : UserControl
     public SolutionView()
     {
         InitializeComponent();
-        DataContext = new SolutionViewModel();
+        DataContext = ((App)Application.Current).Services.GetRequiredService<SolutionViewModel>();
         WeakReferenceMessenger.Default.Register<SolutionView, DrawSolutionMessage>(this, (r, m) =>
         {
             PlotView.Plot.Clear();
