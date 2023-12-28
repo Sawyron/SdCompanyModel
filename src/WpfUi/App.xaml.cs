@@ -15,7 +15,7 @@ public partial class App : Application
     }
     public IServiceProvider Services { get; }
 
-    private static IServiceProvider ConfigureServices()
+    private static ServiceProvider ConfigureServices()
     {
         var services = new ServiceCollection();
         services.AddTransient<SolutionViewModel>();
