@@ -17,13 +17,14 @@ public class SolutionViewModel : ObservableObject
 
     public SolutionViewModel()
     {
+        ExportSolutionCommand = new AsyncRelayCommand(ExportSolution, () => _solutionResult is not null);
         GetSolutionCommand = new AsyncRelayCommand(async () =>
         {
             var result = await GetResults();
             _solutionResult = result;
+            ExportSolutionCommand.NotifyCanExecuteChanged();
             WeakReferenceMessenger.Default.Send(new DrawSolutionMessage(result));
         });
-        ExportSolutionCommand = new AsyncRelayCommand(ExportSolution);
     }
 
     public IAsyncRelayCommand GetSolutionCommand { get; }
@@ -38,16 +39,12 @@ public class SolutionViewModel : ObservableObject
         }
         var dialog = new SaveFileDialog
         {
-            Filter = "CSV file (*.csv)|*.csv"
+            Filter = "CSV (*.csv)|*.csv"
         };
         if (dialog.ShowDialog() == true)
         {
             var solutionService = new SolutionService();
             string fileName = dialog.FileName;
-            if (!fileName.EndsWith("csv"))
-            {
-                fileName = $"{fileName}.csv";
-            }
             using var fs = new FileStream(fileName, FileMode.Create);
             await solutionService.WriteToStreamAsCsvAsync(_solutionResult, fs);
         }
