@@ -2,19 +2,19 @@
 
 public class CsvWriter
 {
-    public async Task WriteToStreamAsync(CsvDto csv, Stream stream, string delimiter = ",")
+    public string Delimiter { get; set; } = ",";
+    public async Task WriteToStreamAsync(CsvDto csv, Stream stream)
     {
-        
-        if (csv.Headers.Length != csv.Lines[0].Length)
+        if (ValidateCsv(csv) is Exception exception)
         {
-            throw new ArgumentException("Lines length should be equal to header's");
+            throw exception;
         }
         async Task WriteLineAsync(string[] line, StreamWriter writer)
         {
-            foreach(string value in line[..(line.Length -1)])
+            foreach (string value in line[..(line.Length - 1)])
             {
                 await writer.WriteAsync(value);
-                await writer.WriteAsync(delimiter);
+                await writer.WriteAsync(Delimiter);
             }
             await writer.WriteLineAsync();
         }
@@ -24,5 +24,23 @@ public class CsvWriter
         {
             await WriteLineAsync(line, writer);
         }
+    }
+
+    private static Exception? ValidateCsv(CsvDto csv)
+    {
+        var lengthsAreNotEqualException = new ArgumentException("Lines length should be equal to header's");
+        if (csv.Lines.Length == 0 && csv.Headers.Length > 0)
+        {
+            return lengthsAreNotEqualException;
+        }
+        if (csv.Headers.Length > 0 && csv.Lines.Length == 0)
+        {
+            return lengthsAreNotEqualException;
+        }
+        if (csv.Headers.Length != csv.Lines[0].Length)
+        {
+            return lengthsAreNotEqualException;
+        }
+        return null;
     }
 }
