@@ -16,7 +16,7 @@ public class CsvWriter
                 await writer.WriteAsync(value);
                 await writer.WriteAsync(Delimiter);
             }
-            await writer.WriteLineAsync();
+            await writer.WriteLineAsync(line[^1]);
         }
         var writer = new StreamWriter(stream);
         await WriteLineAsync(csv.Headers, writer);
