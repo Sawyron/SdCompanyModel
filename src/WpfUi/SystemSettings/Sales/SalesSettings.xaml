@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="WpfUi.SystemSettings.Sales.SalesSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfUi.SystemSettings.Sales"
+             mc:Ignorable="d"
+             d:Width="200"
+             d:Background="White">
+    <Grid Margin="20">
+        <Grid >
+            <Grid.Resources>
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Margin" Value="10"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="TextAlignment" Value="Justify"/>
+                </Style>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Margin" Value="5"/>
+                    <Setter Property="Padding" Value="5"/>
+                    <Setter Property="FontSize" Value="14"/>
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                </Style>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" 
+                       Text="x3"/>
+            <TextBox Grid.Row="0" Grid.Column="1"/>
+            
+            <TextBlock Grid.Row="1" Grid.Column="0"
+                       Text="w1"/>
+            <TextBox Grid.Row="1" Grid.Column="1"/>
+            
+            <TextBlock Grid.Row="2" Grid.Column="0"
+                       Text="k"/>
+            <TextBox Grid.Row="2" Grid.Column="1"/>
+            
+            <TextBlock Grid.Row="3" Grid.Column="0"
+                       Text="T2"/>
+            <TextBox Grid.Row="3" Grid.Column="1"/>
+            
+            <TextBlock Grid.Row="4" Grid.Column="0"
+                       Text="T3"/>
+            <TextBox Grid.Row="4" Grid.Column="1"/>
+            
+            <TextBlock Grid.Row="5" Grid.Column="0"
+                       Text="T4"/>
+            <TextBox Grid.Row="5" Grid.Column="1"/>
+            
+            <TextBlock Grid.Row="6" Grid.Column="0"
+                       Text="T5"/>
+            <TextBox Grid.Row="6" Grid.Column="1"/>
+            
+            <TextBlock Grid.Row="7" Grid.Column="0"
+                       Text="T6"/>
+            <TextBox Grid.Row="7" Grid.Column="1"/>
+            
+            <TextBlock Grid.Row="8" Grid.Column="0"
+                       Text="T7"/>
+            <TextBox Grid.Row="8" Grid.Column="1"/>
+            
+            <TextBlock Grid.Row="9" Grid.Column="0"
+                       Text="T8"/>
+            <TextBox Grid.Row="9" Grid.Column="1"/>
+        </Grid>
+    </Grid>
+</UserControl>
