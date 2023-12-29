@@ -68,10 +68,9 @@ public class SolutionViewModel : ObservableObject
         };
         if (dialog.ShowDialog() == true)
         {
-            var solutionService = new SolutionService();
             string fileName = dialog.FileName;
             using var fs = new FileStream(fileName, FileMode.Create);
-            await solutionService.WriteToStreamAsCsvAsync(_solutionResult, fs);
+            await _solutionService.WriteToStreamAsCsvAsync(_solutionResult, fs);
         }
     }
 
