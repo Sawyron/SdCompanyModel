@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Messaging.Messages;
-using Infrastructure.Solution;
 
 namespace WpfUi.Solution.Messages;
 
-public class DrawSolutionMessage(SystemSolutionResult solution) : ValueChangedMessage<SystemSolutionResult>(solution)
+public class DrawSolutionMessage(double[] time, IDictionary<string, double[]> values)
+    : ValueChangedMessage<(double[] Time, IDictionary<string, double[]> Values)>((time, values))
 { }

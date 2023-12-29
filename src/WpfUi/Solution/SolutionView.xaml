@@ -7,7 +7,8 @@
              xmlns:ScottPlot="clr-namespace:ScottPlot;assembly=ScottPlot.WPF"
              d:DataContext="{d:DesignInstance Type=local:SolutionViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:Background="White">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -16,7 +17,16 @@
         <ScottPlot:WpfPlot x:Name="PlotView" Grid.Row="0"/>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10" >
             <Button Command="{Binding GetSolutionCommand}" Content="Get solution" Margin="5" Padding="5"/>
-            <Button Command="{Binding ExportSolutionCommand}" Content="Export to CSV" Margin="5" Padding="5"></Button>
+            <Button Command="{Binding ExportSolutionCommand}" Content="Export to CSV" Margin="5" Padding="5"/>
+            <StackPanel Margin="5">
+                <RadioButton Command="{Binding SelectFilterCommand}"
+                             CommandParameter="{Binding ProductionFilter}"
+                             Content="Production"
+                             IsChecked="True"/>
+                <RadioButton Command="{Binding SelectFilterCommand}"
+                             CommandParameter="{Binding SalesFilter}"
+                             Content="Sales"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>
