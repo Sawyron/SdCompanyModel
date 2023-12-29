@@ -63,7 +63,7 @@ public class ProductionSolutionProvider : SolutionProvider
                         previousStep["v7"],
                         previousStep["v8"],
                         previousStep["v9"],
-                        _parameters.W11);
+                        previousStep["w11"]);
         double v5 = ProductionSystem.V5(_parameters.K, y3);
         double v1 = ProductionSystem.V1(
                         interval,
@@ -78,7 +78,7 @@ public class ProductionSolutionProvider : SolutionProvider
         double y1 = ProductionSystem.Y1(
                         previousStep["y1"],
                         interval,
-                        _parameters.W11,
+                        previousStep["w11"],
                         previousStep["f3"]);
         double v3 = ProductionSystem.V3(_parameters.T2, _parameters.T3, v5, y2);
         double v2 = ProductionSystem.V2(y1, v3);

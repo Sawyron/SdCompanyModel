@@ -54,7 +54,6 @@ public partial class App : Application
         double productionT3 = 1;
         double y1 = (productionT2 + productionT3) * ui;
         var productionParameters = new ProductionParameters(
-            W11: ui,
             Y1: y1,
             T2: productionT2,
             T3: productionT3,
