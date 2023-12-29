@@ -2,7 +2,7 @@
 
 namespace Solution.SolutionProviders;
 
-public class SystemSolutionProvider
+public class SystemSolutionProvider : SolutionProvider
 {
     private readonly SalesSolutionProvider _salesSolution;
     private readonly ProductionSolutionProvider _productionSolution;
@@ -12,38 +12,34 @@ public class SystemSolutionProvider
         _salesSolution = salesSolution;
         _productionSolution = productionSolution;
     }
-
-    public IEnumerable<SolutionStep> GetSolution(double interval, double end)
+    public override IDictionary<string, double> GetFirstStep()
     {
-        static void TransferDependencies(IDictionary<string, double> sales, IDictionary<string, double> production)
-        {
-            sales["y1"] = production["y1"];
-            sales["v3"] = production["v3"];
-            sales["f3"] = production["f3"];
-            production["w11"] = sales["w11"];
-        }
-        var currentProductionStep = _productionSolution.GetFirstStep();
-        var currentSalesStep = _salesSolution.GetFirstStep();
-        TransferDependencies(currentSalesStep, currentProductionStep);
-        yield return MapStepsToSolutionStep(currentSalesStep, currentProductionStep, 0);
-        int steps = Convert.ToInt32(end / interval) + 1;
-        for (int i = 1; i < steps; i++)
-        {
-            var nextProductionStep = _productionSolution.ResolveStep(currentProductionStep, interval);
-            var nextSalesStep = _salesSolution.ResolveStep(currentSalesStep, interval);
-            TransferDependencies(nextSalesStep, nextProductionStep);
-            yield return MapStepsToSolutionStep(nextSalesStep, nextProductionStep, i * interval);
-            currentSalesStep = nextSalesStep;
-            currentProductionStep = nextProductionStep;
-        }
+        var productionStep = _productionSolution.GetFirstStep();
+        var salesStep = _salesSolution.GetFirstStep();
+        TransferDependencies(salesStep, productionStep);
+        return CombineValues(salesStep, productionStep);
     }
 
-    private static SolutionStep MapStepsToSolutionStep(
+    public override IDictionary<string, double> ResolveStep(IDictionary<string, double> previousStep, double interval)
+    {
+        var productionStep = _productionSolution.ResolveStep(previousStep, interval);
+        var salesStep = _salesSolution.ResolveStep(previousStep, interval);
+        TransferDependencies(salesStep, productionStep);
+        return CombineValues(salesStep, productionStep);
+    }
+
+    private static void TransferDependencies(IDictionary<string, double> sales, IDictionary<string, double> production)
+    {
+        sales["y1"] = production["y1"];
+        sales["v3"] = production["v3"];
+        sales["f3"] = production["f3"];
+        production["w11"] = sales["w11"];
+    }
+
+    private static IDictionary<string, double> CombineValues(
         IDictionary<string, double> sales,
-        IDictionary<string, double> production,
-        double time) => new(
-            time,
+        IDictionary<string, double> production) =>
             sales.Concat(production)
                 .GroupBy(pair => pair.Key)
-                .ToDictionary(group => group.Key, group => group.First().Value));
+                .ToDictionary(group => group.Key, group => group.First().Value);
 }

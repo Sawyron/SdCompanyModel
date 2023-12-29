@@ -3,7 +3,7 @@ using Solution.Conditions;
 
 namespace Solution.SolutionProviders;
 
-public class ProductionSolutionProvider
+public class ProductionSolutionProvider : SolutionProvider
 {
     private readonly ProductionParameters _parameters;
     private readonly ProductionVariables _variables;
@@ -14,20 +14,7 @@ public class ProductionSolutionProvider
         _variables = variables;
     }
 
-    public IEnumerable<SolutionStep> GetSolution(double interval, double end)
-    {
-        int steps = Convert.ToInt32(end / interval) + 1;
-        var currentStep = GetFirstStep();
-        yield return new SolutionStep(0, currentStep);
-        for (int i = 1; i < steps; i++)
-        {
-            var nextStep = ResolveStep(currentStep, interval);
-            yield return new SolutionStep(i * interval, nextStep);
-            currentStep = nextStep;
-        }
-    }
-
-    public IDictionary<string, double> GetFirstStep()
+    public override IDictionary<string, double> GetFirstStep()
     {
         return new Dictionary<string, double>
         {
@@ -51,7 +38,7 @@ public class ProductionSolutionProvider
         };
     }
 
-    public IDictionary<string, double> ResolveStep(IDictionary<string, double> previousStep, double interval)
+    public override IDictionary<string, double> ResolveStep(IDictionary<string, double> previousStep, double interval)
     {
         double y3 = ProductionSystem.Y3(
                         previousStep["y3"],

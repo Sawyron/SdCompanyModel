@@ -3,7 +3,7 @@ using Solution.Conditions;
 
 namespace Solution.SolutionProviders;
 
-public class SalesSolutionProvider
+public class SalesSolutionProvider : SolutionProvider
 {
     private readonly SalesParameters _parameters;
     private readonly SalesVariables _variables;
@@ -14,20 +14,7 @@ public class SalesSolutionProvider
         _variables = variables;
     }
 
-    public IEnumerable<SolutionStep> GetSolution(double interval, double end)
-    {
-        int steps = Convert.ToInt32(end / interval) + 1;
-        var currentStep = GetFirstStep();
-        yield return new SolutionStep(0, currentStep);
-        for (int i = 1; i < steps; i++)
-        {
-            var nextStep = ResolveStep(currentStep, interval);
-            yield return new SolutionStep(i * interval, nextStep);
-            currentStep = nextStep;
-        }
-    }
-
-    public IDictionary<string, double> GetFirstStep() => new Dictionary<string, double>
+    public override IDictionary<string, double> GetFirstStep() => new Dictionary<string, double>
         {
             {"x1", _variables.X1  },
             {"x2", _variables.X2 },
@@ -47,7 +34,7 @@ public class SalesSolutionProvider
             {"w3", _variables.W3 }
         };
 
-    public IDictionary<string, double> ResolveStep(IDictionary<string, double> previousStep, double interval)
+    public override IDictionary<string, double> ResolveStep(IDictionary<string, double> previousStep, double interval)
     {
         double x3 = SalesSystem.X3(
                         interval,

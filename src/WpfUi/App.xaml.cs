@@ -27,7 +27,7 @@ public partial class App : Application
         services.AddTransient<SolutionViewModel>();
         services.AddTransient<MainViewModel>();
         services.AddTransient<ProductionSettingsViewModel>();
-        services.AddSingleton<Func<double ,SystemSolutionProvider>>((_) => (interval) => CreateSolutionService(interval));
+        services.AddSingleton<Func<double ,SystemSolutionProvider>>((_) => (interval) => CreateSolutionProvider(interval));
         services.AddSingleton<SolutionService>();
         services.AddSingleton((_) =>
             new SystemParametersService(new ProductionInput(
@@ -47,7 +47,7 @@ public partial class App : Application
         return services.BuildServiceProvider();
     }
 
-    private static SystemSolutionProvider CreateSolutionService(double interval)
+    private static SystemSolutionProvider CreateSolutionProvider(double interval)
     {
         double ui = 1000;
         double productionT2 = 1;
@@ -67,10 +67,10 @@ public partial class App : Application
         var productionVariables = ProductionVariables.CreateFromInitial(
             w11: ui,
             y3: ui,
-            v1: 1000,
-            v6: 1000,
-            v10: 1000,
-            v11: 1000,
+            v1: 10000,
+            v6: 10000,
+            v10: 10000,
+            v11: 10000,
             interval: interval,
             parameters: productionParameters);
         var salesParameters = new SalesParameters(

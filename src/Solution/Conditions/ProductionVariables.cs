@@ -31,12 +31,12 @@ public record ProductionVariables(
         double interval,
         ProductionParameters parameters)
     {
+        double y1 = (parameters.T2 + parameters.T3) * y3;
+        double y2 = parameters.K * y3;
         double y4 = parameters.T6 * w11;
         double y5 = parameters.T7 * w11;
-        double v5 = parameters.K * y3;
-        double y2 = parameters.K * y3;
+        double v5 = ProductionSystem.V5(parameters.K, y3);
         double v4 = ProductionSystem.V4(interval, y2);
-        double y1 = (parameters.T2 + parameters.T3) * y3;
         double v3 = ProductionSystem.V3(parameters.T2, parameters.T3, v5, y2);
         double v2 = ProductionSystem.V2(y1, v3);
         return new ProductionVariables(
