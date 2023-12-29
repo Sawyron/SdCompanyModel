@@ -13,7 +13,7 @@ namespace WpfUi;
 /// <summary>
 /// Interaction logic for App.xaml
 /// </summary>
-public partial class App : Application 
+public partial class App : Application
 {
     public App()
     {
@@ -27,7 +27,7 @@ public partial class App : Application
         services.AddTransient<SolutionViewModel>();
         services.AddTransient<MainViewModel>();
         services.AddTransient<ProductionSettingsViewModel>();
-        services.AddSingleton<Func<double ,SystemSolutionProvider>>((_) => (interval) => CreateSolutionProvider(interval));
+        services.AddSingleton<Func<double, SystemSolutionProvider>>((_) => (interval) => CreateSolutionProvider(interval));
         services.AddSingleton<SolutionService>();
         services.AddSingleton((_) =>
             new SystemParametersService(new ProductionInput(

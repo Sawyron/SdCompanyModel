@@ -1,6 +1,4 @@
-﻿using Solution.Conditions;
-
-namespace Solution.SolutionProviders;
+﻿namespace Solution.SolutionProviders;
 
 public class SystemSolutionProvider : SolutionProvider
 {

@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Infrastructure.Solution;
 using Microsoft.Win32;
-using Solution.Conditions;
 using Solution.SolutionProviders;
 using System.IO;
 using System.Windows;

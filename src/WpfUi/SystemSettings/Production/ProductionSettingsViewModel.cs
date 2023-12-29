@@ -22,14 +22,14 @@ public class ProductionSettingsViewModel : ObservableObject
     }
 
     private double _y3;
-	public double Y3
+    public double Y3
     {
         get => _y3;
         set => SetProperty(ref _y3, value);
     }
 
-	private double _v1;
-	public double V1
+    private double _v1;
+    public double V1
     {
         get => _v1;
         set => SetProperty(ref _v1, value);
