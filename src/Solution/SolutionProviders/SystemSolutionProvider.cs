@@ -18,10 +18,21 @@ public class SystemSolutionProvider : SolutionProvider
         return CombineValues(salesStep, productionStep);
     }
 
-    public override IDictionary<string, double> ResolveStep(IDictionary<string, double> previousStep, double interval)
+    public override IDictionary<string, double> ResolveStep(
+        IDictionary<string, double> previousStep,
+        IDictionary<string, double> externals,
+        double interval)
     {
-        var productionStep = _productionSolution.ResolveStep(previousStep, interval);
-        var salesStep = _salesSolution.ResolveStep(previousStep, interval);
+        var productionStep = _productionSolution.ResolveStep(previousStep, new Dictionary<string, double>(), interval);
+        var salesStep = _salesSolution.ResolveStep(
+            previousStep,
+            new Dictionary<string, double>
+            {
+                {"f3", productionStep["f3"] },
+                {"y1", productionStep["y1"] },
+                {"v3", productionStep["v3"] }
+            },
+            interval);
         TransferDependencies(salesStep, productionStep);
         return CombineValues(salesStep, productionStep);
     }

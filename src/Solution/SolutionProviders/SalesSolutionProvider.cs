@@ -34,7 +34,10 @@ public class SalesSolutionProvider : SolutionProvider
             {"w3", _variables.W3 }
         };
 
-    public override IDictionary<string, double> ResolveStep(IDictionary<string, double> previousStep, double interval)
+    public override IDictionary<string, double> ResolveStep(
+        IDictionary<string, double> previousStep,
+        IDictionary<string, double> externals,
+        double interval)
     {
         double x3 = SalesSystem.X3(
                         interval,
@@ -70,13 +73,13 @@ public class SalesSolutionProvider : SolutionProvider
         double x6 = SalesSystem.X6(
                         previousStep["x6"],
                         interval,
-                        previousStep["f3"],
+                        externals["f3"],
                         previousStep["w1"]);
         return new Dictionary<string, double>()
         {
             { "w1", SalesSystem.W1(
                 interval,
-                previousStep["f3"],
+                externals["f3"],
                 _parameters.ShipmentDelay,
                 previousStep["w1"]) },
             { "x6", x6 },
@@ -96,10 +99,10 @@ public class SalesSolutionProvider : SolutionProvider
                 x3,
                 _parameters.OrderProcessDelay,
                 _parameters.AbsenceDelay) },
-            {"w8", SalesSystem.W8(x4, x5, x6, previousStep["y1"]) },
+            {"w8", SalesSystem.W8(x4, x5, x6, externals["y1"]) },
             {"w7", SalesSystem.W7(
                 x3,
-                previousStep["v3"],
+                externals["v3"],
                 _parameters.OrderProcessDelay,
                 _parameters.LinkDelay,
                 _parameters.ShipmentDelay) },

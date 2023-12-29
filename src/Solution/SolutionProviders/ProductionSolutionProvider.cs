@@ -38,7 +38,10 @@ public class ProductionSolutionProvider : SolutionProvider
         };
     }
 
-    public override IDictionary<string, double> ResolveStep(IDictionary<string, double> previousStep, double interval)
+    public override IDictionary<string, double> ResolveStep(
+        IDictionary<string, double> previousStep,
+        IDictionary<string, double> externals,
+        double interval)
     {
         double y3 = ProductionSystem.Y3(
                         previousStep["y3"],

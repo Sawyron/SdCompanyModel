@@ -70,11 +70,11 @@ public static class SalesSystem
 
     public static double W10(
         double interval,
-        double procurementSetRate,
+        double w6Rate,
         double T6,
-        double procurementLevel) => SystemDynamics.GetDelay(
-            procurementLevel,
-            procurementSetRate,
+        double level) => SystemDynamics.GetDelay(
+            level,
+            w6Rate,
             T6,
             interval,
             3).Rate;
@@ -87,10 +87,10 @@ public static class SalesSystem
 
     public static double W11(
         double interval,
-        double issuedProcurementOrderRate,
+        double w10Rate,
         double T7,
-        double issuedProcurementOrderLevel) => SystemDynamics.GetDelay(issuedProcurementOrderLevel,
-            issuedProcurementOrderRate,
+        double level) => SystemDynamics.GetDelay(level,
+            w10Rate,
             T7,
             interval,
             3).Rate;
@@ -103,11 +103,11 @@ public static class SalesSystem
 
     public static double W1(
         double interval,
-        double suppliesFromProductionStockRate,
+        double f3Rate,
         double T8,
-        double suppliesFromProductionStockLevel) => SystemDynamics.GetDelay(
-            suppliesFromProductionStockLevel,
-            suppliesFromProductionStockRate,
+        double level) => SystemDynamics.GetDelay(
+            level,
+            f3Rate,
             T8,
             interval,
             3).Rate;

@@ -66,10 +66,10 @@ public partial class App : Application
         var productionVariables = ProductionVariables.CreateFromInitial(
             w11: ui,
             y3: ui,
-            v1: 10000,
-            v6: 10000,
-            v10: 10000,
-            v11: 10000,
+            v1: 1000,
+            v6: 1000,
+            v10: 1000,
+            v11: 1000,
             interval: interval,
             parameters: productionParameters);
         var salesParameters = new SalesParameters(
