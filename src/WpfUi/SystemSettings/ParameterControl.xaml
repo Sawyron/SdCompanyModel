@@ -6,13 +6,15 @@
              xmlns:local="clr-namespace:WpfUi.SystemSettings"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             d:DataContext="{d:DesignInstance Type=local:ParameterInput}">
+             d:DataContext="{d:DesignInstance Type=local:ParameterInput}"
+             d:Background="White">
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" SharedSizeGroup="ParameterNameGroup" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <TextBlock Text="{Binding Path=Name}"
+               d:Text="X"
                Grid.Column="0"
                Margin="10"/>
         <TextBox Text="{Binding Path=Value, StringFormat=G}"
