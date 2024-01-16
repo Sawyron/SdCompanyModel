@@ -6,7 +6,6 @@ using System.Windows;
 using WpfUi.Main;
 using WpfUi.Solution;
 using WpfUi.SystemSettings;
-using WpfUi.SystemSettings.Production;
 
 namespace WpfUi;
 
@@ -26,25 +25,29 @@ public partial class App : Application
         var services = new ServiceCollection();
         services.AddTransient<SolutionViewModel>();
         services.AddTransient<MainViewModel>();
-        services.AddTransient<ProductionSettingsViewModel>();
-        services.AddSingleton<Func<double, SystemSolutionProvider>>((_) => (interval) => CreateSolutionProvider(interval));
+        services.AddSingleton<Func<double, SystemSolutionProvider>>(_ => (interval) => CreateSolutionProvider(interval));
         services.AddSingleton<SolutionService>();
-        services.AddSingleton((_) =>
-            new SystemParametersService(new ProductionInput(
-                Y3: 1000,
-                V1: 10,
-                V6: 10,
-                V10: 10,
-                V11: 10,
-                T2: 1,
-                T3: 1,
-                T4: 8,
-                T5: 4,
-                T6: 1,
-                T7: 6,
-                K: 4,
-                Beta: 1000 * 1000)));
+        services.AddTransient<SettingsViewModel>();
+        services.AddSingleton(_ => CreateParameterInputService());
         return services.BuildServiceProvider();
+    }
+
+    private static ParameterInputService CreateParameterInputService()
+    {
+        var parameters = new Dictionary<string, double>
+        {
+            {"u1", 1000 },
+            {"y1", 0 },
+            {"t2", 0 },
+            {"t3", 0 },
+            {"t4", 8 },
+            {"t5", 4 },
+            {"t6", 1 },
+            {"t7", 6 },
+            {"K2", 4 },
+            {"Beta", 1000 * 1000 },
+        };
+        return new ParameterInputService(parameters);
     }
 
     private static SystemSolutionProvider CreateSolutionProvider(double interval)
