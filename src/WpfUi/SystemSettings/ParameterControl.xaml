@@ -13,7 +13,7 @@
             <ColumnDefinition Width="auto" SharedSizeGroup="ParameterNameGroup" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TextBlock Text="{Binding Path=Name}"
+        <TextBlock Text="{Binding Path=Name, Mode=OneTime}"
                d:Text="X"
                Grid.Column="0"
                Margin="10"/>

@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Infrastructure.Solution;
 using Microsoft.Win32;
-using Solution.SolutionProviders;
+using Solution.Company;
 using System.IO;
 using System.Windows;
 using WpfUi.Solution.Messages;
@@ -18,14 +18,12 @@ public class SolutionViewModel : ObservableObject
         (name) => name.StartsWith('x');
 
     private readonly SolutionService _solutionService;
-    private readonly Func<double, SystemSolutionProvider> _solutionFactory;
     private SystemSolutionResult? _solutionResult;
     private Func<string, bool> _solutionFilter = _productionFilter;
 
-    public SolutionViewModel(SolutionService solutionService, Func<double, SystemSolutionProvider> solutionFactory)
+    public SolutionViewModel(SolutionService solutionService)
     {
         _solutionService = solutionService;
-        _solutionFactory = solutionFactory;
         ExportSolutionCommand = new AsyncRelayCommand(ExportSolution, () => _solutionResult is not null);
         GetSolutionCommand = new AsyncRelayCommand(GetSolution);
         SelectFilterCommand = new RelayCommand<Func<string, bool>>(
@@ -48,7 +46,7 @@ public class SolutionViewModel : ObservableObject
     private async Task GetSolution()
     {
         double interval = 0.05;
-        var result = await Task.Run(() => _solutionService.GetSolution(interval, 50, _solutionFactory(interval)));
+        var result = await Task.Run(() => _solutionService.GetSolution(interval, 50));
         _solutionResult = result;
         ExportSolutionCommand.NotifyCanExecuteChanged();
         var message = MapResultToDrawMessage(result, _solutionFilter);
@@ -68,8 +66,7 @@ public class SolutionViewModel : ObservableObject
         };
         if (dialog.ShowDialog() == true)
         {
-            string fileName = dialog.FileName;
-            using var fs = new FileStream(fileName, FileMode.Create);
+            using var fs = new FileStream(dialog.FileName, FileMode.Create);
             await _solutionService.WriteToStreamAsCsvAsync(_solutionResult, fs);
         }
     }

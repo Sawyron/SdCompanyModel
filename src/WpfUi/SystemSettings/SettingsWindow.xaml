@@ -6,16 +6,29 @@
         xmlns:local="clr-namespace:WpfUi.SystemSettings"
         mc:Ignorable="d"
         Title="Settings" Height="450" Width="800"
-        d:DataContext="{d:DesignInstance Type=local:SettingsViewModel}">
+        WindowStartupLocation="CenterOwner"
+        Background="AliceBlue"
+        d:DataContext="{d:DesignInstance Type=local:SettingsViewModel}" >
     <Grid>
-        <ScrollViewer>
-            <ItemsControl ItemsSource="{Binding Parameters}" Grid.IsSharedSizeScope="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0">
+            <ItemsControl ItemsSource="{Binding Groups}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <local:ParameterControl />
+                        <local:ParameterGroupControl />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
+        <Grid Grid.Row="1">
+            <Button 
+                Command="{Binding SaveParametersCommand}"
+                Content="Save"
+                Margin="10" Padding="10 5"
+                HorizontalAlignment="Left" VerticalAlignment="Center" />
+        </Grid>
     </Grid>
 </Window>

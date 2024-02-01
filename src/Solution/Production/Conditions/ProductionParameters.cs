@@ -1,7 +1,6 @@
-﻿namespace Solution.Conditions;
+﻿namespace Solution.Production.Conditions;
 
 public record ProductionParameters(
-    double Y1,
     double T2,
     double T3,
     double T4,

@@ -2,7 +2,7 @@
 
 public class CsvWriter
 {
-    public string Delimiter { get; set; } = ",";
+    public string Delimiter { get; init; } = ",";
     public async Task WriteToStreamAsync(CsvDto csv, Stream stream)
     {
         if (ValidateCsv(csv) is Exception exception)
@@ -11,7 +11,7 @@ public class CsvWriter
         }
         async Task WriteLineAsync(string[] line, StreamWriter writer)
         {
-            foreach (string value in line[..(line.Length - 1)])
+            foreach (string value in line[..^1])
             {
                 await writer.WriteAsync(value);
                 await writer.WriteAsync(Delimiter);

@@ -1,4 +1,4 @@
-﻿using Solution.Conditions;
+﻿using Solution.Common;
 
 namespace Infrastructure.Solution;
 

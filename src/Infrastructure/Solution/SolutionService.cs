@@ -1,16 +1,23 @@
 ﻿using Infrastructure.Csv;
-using Solution.Conditions;
-using Solution.SolutionProviders;
+using Solution.Common;
+using Solution.Company;
 using System.Globalization;
 
 namespace Infrastructure.Solution;
 
 public class SolutionService
 {
-    public SystemSolutionResult GetSolution(double interval, double end, SystemSolutionProvider solutionProvider)
+    private readonly SolutionResolver _solutionResolver;
+
+    public SolutionService(SolutionResolver solutionResolver)
     {
-        List<SolutionStep> result = solutionProvider.GetSolution(interval, end).ToList();
-        return new SystemSolutionResult(result);
+        _solutionResolver = solutionResolver;
+    }
+
+    public SystemSolutionResult GetSolution(double interval, double end)
+    {
+        var result = _solutionResolver.GetSolution(0, end, interval);
+        return new SystemSolutionResult(result.ToList());
     }
 
     public async Task WriteToStreamAsCsvAsync(SystemSolutionResult solutionResult, Stream stream)
