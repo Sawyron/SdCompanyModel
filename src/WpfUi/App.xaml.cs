@@ -80,7 +80,6 @@ public partial class App : Application
             {"t7", 6 },
             {"K2", 4 },
             {"v1", 1000 },
-            {"v3", 1000 },
             {"v6", 1000 },
             {"v10", 1000 },
             {"v11", 1000 },
