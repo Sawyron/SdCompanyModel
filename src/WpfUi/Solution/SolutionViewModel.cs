@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Infrastructure.Solution;
 using Microsoft.Win32;
-using Solution.Company;
 using System.IO;
 using System.Windows;
 using WpfUi.Solution.Messages;
@@ -16,10 +15,15 @@ public class SolutionViewModel : ObservableObject
         (name) => name.StartsWith('y');
     private static readonly Func<string, bool> _salesFilter =
         (name) => name.StartsWith('x');
+    private static readonly Func<IGrouping<string, KeyValuePair<string, double>>, IEnumerable<double>> _absoluteMapper =
+        group => group.Select(pair => pair.Value);
+    private static readonly Func<IGrouping<string, KeyValuePair<string, double>>, IEnumerable<double>> _percentMapper =
+        group => group.Select(pair => pair.Value / group.First().Value * 100);
 
     private readonly SolutionService _solutionService;
     private SystemSolutionResult? _solutionResult;
     private Func<string, bool> _solutionFilter = _productionFilter;
+    private Func<IGrouping<string, KeyValuePair<string, double>>, IEnumerable<double>> _groupMapper = _absoluteMapper;
 
     public SolutionViewModel(SolutionService solutionService)
     {
@@ -27,21 +31,33 @@ public class SolutionViewModel : ObservableObject
         ExportSolutionCommand = new AsyncRelayCommand(ExportSolution, () => _solutionResult is not null);
         GetSolutionCommand = new AsyncRelayCommand(GetSolution);
         SelectFilterCommand = new RelayCommand<Func<string, bool>>(
-            (filter) =>
+            filter =>
             {
                 _solutionFilter = filter is not null ? filter : _solutionFilter;
                 if (_solutionResult is not null)
                 {
-                    WeakReferenceMessenger.Default.Send(MapResultToDrawMessage(_solutionResult, _solutionFilter));
+                    WeakReferenceMessenger.Default.Send(MapResultToDrawMessage(_solutionResult));
                 }
             });
+        SelectModeCommand = new RelayCommand<Func<IGrouping<string, KeyValuePair<string, double>>, IEnumerable<double>>>(
+            mapper =>
+        {
+            _groupMapper = mapper is not null ? mapper : _groupMapper;
+            if (_solutionResult is not null)
+            {
+                WeakReferenceMessenger.Default.Send(MapResultToDrawMessage(_solutionResult));
+            }
+        });
     }
 
     public IAsyncRelayCommand GetSolutionCommand { get; }
     public IAsyncRelayCommand ExportSolutionCommand { get; }
     public IRelayCommand<Func<string, bool>> SelectFilterCommand { get; }
+    public IRelayCommand<Func<IGrouping<string, KeyValuePair<string, double>>, IEnumerable<double>>> SelectModeCommand { get; }
     public Func<string, bool> ProductionFilter => _productionFilter;
     public Func<string, bool> SalesFilter => _salesFilter;
+    public Func<IGrouping<string, KeyValuePair<string, double>>, IEnumerable<double>> AbsoluteMapper => _absoluteMapper;
+    public Func<IGrouping<string, KeyValuePair<string, double>>, IEnumerable<double>> PercentMapper => _percentMapper;
 
     private async Task GetSolution()
     {
@@ -49,7 +65,7 @@ public class SolutionViewModel : ObservableObject
         var result = await Task.Run(() => _solutionService.GetSolution(interval, 50));
         _solutionResult = result;
         ExportSolutionCommand.NotifyCanExecuteChanged();
-        var message = MapResultToDrawMessage(result, _solutionFilter);
+        var message = MapResultToDrawMessage(result);
         WeakReferenceMessenger.Default.Send(message);
     }
 
@@ -71,14 +87,14 @@ public class SolutionViewModel : ObservableObject
         }
     }
 
-    private static DrawSolutionMessage MapResultToDrawMessage(SystemSolutionResult result, Func<string, bool> filter)
+    private DrawSolutionMessage MapResultToDrawMessage(SystemSolutionResult result)
     {
         var time = result.Steps.Select(tuple => tuple.Time).ToArray();
         var solutions = result.Steps.Select(tuple => tuple.Values)
             .SelectMany(dict => dict)
             .GroupBy(pair => pair.Key)
-            .Where(pair => filter(pair.Key))
-            .ToDictionary(g => g.Key, g => g.Select(pair => pair.Value).ToArray());
+            .Where(pair => _solutionFilter(pair.Key))
+            .ToDictionary(g => g.Key, g => _groupMapper(g).ToArray());
         return new DrawSolutionMessage(time, solutions);
     }
 }

@@ -18,15 +18,28 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10" >
             <Button Command="{Binding GetSolutionCommand}" Content="Get solution" Margin="5" Padding="5"/>
             <Button Command="{Binding ExportSolutionCommand}" Content="Export to CSV" Margin="5" Padding="5"/>
-            <StackPanel Margin="5">
-                <RadioButton Command="{Binding SelectFilterCommand}"
-                             CommandParameter="{Binding ProductionFilter}"
-                             Content="Production"
-                             IsChecked="True"/>
-                <RadioButton Command="{Binding SelectFilterCommand}"
-                             CommandParameter="{Binding SalesFilter}"
-                             Content="Sales"/>
-            </StackPanel>
+            <GroupBox Header="System" Margin="5">
+                <StackPanel>
+                    <RadioButton Command="{Binding SelectFilterCommand}"
+                 CommandParameter="{Binding ProductionFilter}"
+                 Content="Production"
+                 IsChecked="True"/>
+                    <RadioButton Command="{Binding SelectFilterCommand}"
+                 CommandParameter="{Binding SalesFilter}"
+                 Content="Sales"/>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Header="Mode" Margin="5">
+                <StackPanel>
+                    <RadioButton Command="{Binding SelectModeCommand}"
+                        CommandParameter="{Binding AbsoluteMapper}"
+                        Content="Absolute"
+                        IsChecked="True"/>
+                    <RadioButton Command="{Binding SelectModeCommand}"
+                        CommandParameter="{Binding PercentMapper}"
+                        Content="Percent"/>
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
     </Grid>
 </UserControl>
