@@ -71,6 +71,7 @@ public partial class App : Application
             {"T8", 1 },
             {"K1", 8 },
             {"w1", 1000 },
+            {"w6", 1000 },
             {"y3", 1 },
             {"t2", 1 },
             {"t3", 1 },

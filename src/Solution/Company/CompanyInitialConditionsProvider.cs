@@ -59,7 +59,7 @@ public class CompanyInitialConditionsProvider
                 x2,
                 w5) },
             {"w5", SalesSystem.W5(salesParameters.K, x3) },
-            {"w6", x3 },
+            {"w6", input["w6"] },
             {"w7", SalesSystem.W7(
                 x3,
                 v3,
