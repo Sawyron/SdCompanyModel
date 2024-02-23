@@ -12,9 +12,22 @@ namespace WpfUi.Solution;
 public class SolutionViewModel : ObservableObject
 {
     private static readonly Func<string, bool> _productionFilter =
-        (name) => name.StartsWith('y');
+        (name) =>
+            name == "uk" ||
+            name == "w11" ||
+            name == "y1" ||
+            name == "y2" ||
+            name == "y5" ||
+            name == "v11";
     private static readonly Func<string, bool> _salesFilter =
-        (name) => name.StartsWith('x');
+        (name) =>
+            name == "x1" ||
+            name == "uk" ||
+            name == "x1" ||
+            name == "x2" ||
+            name == "x6" ||
+            name == "f1" ||
+            name == "v3";
     private static readonly Func<IGrouping<string, KeyValuePair<string, double>>, IEnumerable<double>> _absoluteMapper =
         group => group.Select(pair => pair.Value);
     private static readonly Func<IGrouping<string, KeyValuePair<string, double>>, IEnumerable<double>> _percentMapper =
