@@ -5,20 +5,23 @@ using Solution.Production.Conditions;
 namespace Solution.Production;
 public class ProductionStepResolver : IStepResolver
 {
-    private readonly Func<ProductionParameters> _parametersFactory;
+    private readonly ProductionParameters _parameters;
+    private readonly ThirdOrderDelay _v1Delay;
+    private readonly ThirdOrderDelay _v10Delay;
 
-    public ProductionStepResolver(Func<ProductionParameters> parametersFactory)
+    public ProductionStepResolver(ProductionParameters parameters)
     {
-        _parametersFactory = parametersFactory;
+        _parameters = parameters;
+        _v1Delay = new(parameters.T7);
+        _v10Delay = new(parameters.T6);
     }
 
     public IDictionary<string, double> ResolveStep(IReadOnlyDictionary<string, double> variables, double interval)
     {
-        var parameters = _parametersFactory();
         double y3 = ProductionSystem.Y3(
                         variables["y3"],
                         interval,
-                        parameters.T4,
+                        _parameters.T4,
                         variables["w11"]);
         double y5 = ProductionSystem.Y5(
                         variables["y5"],
@@ -33,18 +36,14 @@ public class ProductionStepResolver : IStepResolver
         double v6 = ProductionSystem.V6(
                         variables["y1"],
                         variables["y2"],
-                        parameters.T5,
+                        _parameters.T5,
                         variables["v5"],
                         variables["v7"],
                         variables["v8"],
                         variables["v9"],
                         variables["w11"]);
-        double v5 = ProductionSystem.V5(parameters.K, y3);
-        double v1 = ProductionSystem.V1(
-                        interval,
-                        variables["v10"],
-                        parameters.T7,
-                        variables["v1"]);
+        double v5 = ProductionSystem.V5(_parameters.K, y3);
+        double v1 = _v1Delay.GetDelayValues(interval, variables["v10"]).Rate;
         double y2 = ProductionSystem.Y2(
                         variables["y2"],
                         interval,
@@ -55,9 +54,10 @@ public class ProductionStepResolver : IStepResolver
                         interval,
                         variables["w11"],
                         variables["f3"]);
-        double v3 = ProductionSystem.V3(parameters.T2, parameters.T3, v5, y2);
+        double v3 = ProductionSystem.V3(_parameters.T2, _parameters.T3, v5, y2);
         double v2 = ProductionSystem.V2(y1, v3);
         double v4 = ProductionSystem.V4(interval, y2);
+        double v10 = _v10Delay.GetDelayValues(interval, variables["v6"]).Rate;
         return new Dictionary<string, double>
         {
             {"v1", v1 },
@@ -67,20 +67,16 @@ public class ProductionStepResolver : IStepResolver
             {"v5", v5 },
             {"v6", v6 },
             {"v7", ProductionSystem.V7(
-                parameters.T6,
-                parameters.T7,
+                _parameters.T6,
+                _parameters.T7,
                 y3) },
             {"v8", ProductionSystem.V8(y4, y5) },
             {"v9", ProductionSystem.V9(
-                parameters.T2,
-                parameters.T7,
+                _parameters.T2,
+                _parameters.T7,
                 y3) },
-            {"v10", ProductionSystem.V10(
-                interval,
-                variables["v6"],
-                parameters.T6,
-                variables["v10"]) },
-            {"v11", ProductionSystem.V11(v6, parameters.Beta) },
+            {"v10", v10 },
+            {"v11", ProductionSystem.V11(v6, _parameters.Beta) },
             {"y1", y1 },
             {"y2", y2 },
             {"y3", y3 },

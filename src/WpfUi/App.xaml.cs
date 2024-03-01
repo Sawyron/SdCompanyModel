@@ -3,9 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Solution.Common;
 using Solution.Company;
 using Solution.Production;
-using Solution.Production.Conditions;
 using Solution.Sales;
-using Solution.Sales.Conditions;
 using System.Windows;
 using WpfUi.Main;
 using WpfUi.Solution;
@@ -34,19 +32,17 @@ public partial class App : Application
         services.AddSingleton(_ => CreateParameterInputService());
         services.AddSingleton<SalesParametersProvider>();
         services.AddSingleton<ProductionParametersProvider>();
-        services.AddSingleton<Func<SalesParameters>>(services =>
-        {
-            var parametersProvider = services.GetRequiredService<SalesParametersProvider>();
-            return () => parametersProvider.GetSalesParameters();
-        });
-        services.AddSingleton<Func<ProductionParameters>>(services =>
-        {
-            var parametersProvider = services.GetRequiredService<ProductionParametersProvider>();
-            return () => parametersProvider.GetProductionParameters();
-        });
         services.AddSingleton<SalesStepResolver>();
         services.AddSingleton<ProductionStepResolver>();
-        services.AddSingleton<IStepResolver, CompanyStepResolver>();
+        services.AddSingleton<Func<IStepResolver>>(services =>
+        {
+            var salesParametersProvider = services.GetRequiredService<SalesParametersProvider>();
+            var productionParametersProvider = services.GetRequiredService<ProductionParametersProvider>();
+            return () => new CompanyStepResolver(
+                new ProductionStepResolver(productionParametersProvider.GetProductionParameters()),
+                new SalesStepResolver(salesParametersProvider.GetSalesParameters()));
+        });
+        //services.AddSingleton<IStepResolver, CompanyStepResolver>();
         services.AddSingleton<CompanyInitialConditionsProvider>();
         services.AddSingleton<Func<IDictionary<string, double>>>(services =>
         {
@@ -72,7 +68,6 @@ public partial class App : Application
             {"K1", 8 },
             {"w1", 1000 },
             {"w6", 1000 },
-            {"y3", 1 },
             {"t2", 1 },
             {"t3", 1 },
             {"t4", 8 },
